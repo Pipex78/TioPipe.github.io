@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Exo+2&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Acme&display=swap" rel="stylesheet">
+
+</head>
+<body class="green lighten-4 " style="font-family: 'Exo 2', sans-serif; background-image:url(img/argyle.png);">
+    <header>
+        <nav>
+            <div class="nav-wrapper green darken-3" style="font-family: 'Acme', sans-serif;            ">
+              <a href="#" class="brand-logo center">Proyecto FC Users</a>
+              <ul id="nav-mobile" class="right hide-on-med-and-down">
+                
+              </ul>
+            </div>
+          </nav>
+    </header>
+
+
+    <main>
+        <div id="app">
+
+            <div class="card-panel " v-if="estado">
+                <div class="progress">
+                    <div class="indeterminate"></div>
+                </div>
+            </div>
+    
+            <div class="row" v-if="!estado">
+                
+                    
+                        <ul>
+                            <li v-for='item in users'>
+                                <div class="col l3">
+                                    <div class="card-panel light-green lighten-5 center">
+                                        <img :src="item.picture.large" class="responsive-img circle">
+                                        <br><br>
+                                        {{item.name.first}} 
+                                        <br><br>
+                                        <button @click ="ver_modal(item)"  class="btn-floating material-icons">assignment_ind</button>
+                                        <br>
+                                        Mas Info
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        
+                        
+                        
+                        <hr>
+                        
+    
+                    
+                
+            </div>
+                <div id="modal1" class="modal">
+                    <div v-if="usuario!=null">
+                        <div class="modal-content">
+                        <h4>{{usuario.name.title}}. {{usuario.name.first}} {{usuario.name.last}}</h4>
+                        <p>
+                            Pais: {{usuario.location.country}}  <br>
+                            Ciudad: {{usuario.location.city}}    <br>
+                            E-Mail: {{usuario.email}}            <br>
+                            Telefono: {{usuario.cell}}           <br>
+    
+                        </p>
+                        </div>
+                        <div class="modal-footer">
+                        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+                        </div>
+                    </div>    
+              </div>
+        </div>
+    </main>
+    <footer>
+        <footer class="page-footer green darken-3">
+            <div class="container">
+              <div class="row">
+                <div class="col l6 s12">
+                  <h5 class="white-text">Desarrollo de Aplicaciones Web</h5>
+                  
+                </div>
+                <div class="col l4 offset-l2 s12">
+                  <h5 class="white-text">Contactos</h5>
+                  <ul>
+                   <p>
+                    E-Mail: Fecc_7@hotmail.com <br>
+                    Whatsapp: +569 53445519
+                   </p> 
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="footer-copyright">
+              <div class="container">
+              © 2019 Copyright Text
+              <a class="grey-text text-lighten-4 right" href="#!">Desarrollador: Felipe Castro</a>
+              </div>
+            </div>
+          </footer>
+    </footer>
+    
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script>
+    
+        new Vue({
+            el:'#app',
+            data:{
+                estado:true,
+                users:[],
+                url:'https://randomuser.me/api/?results=20',
+                usuario:null
+            },
+            methods:{
+                async cargar(){
+                    var resultado=await axios.get(this.url);
+                    this.users=resultado.data.results;
+                    console.log(resultado.data);
+                    this.estado=false;
+                },
+                ver_modal(item){
+                    this.usuario=item;
+                    var instance = M.Modal.getInstance(document.getElementById('modal1'));
+                    instance.open();
+                }
+            },
+            created(){
+                this.cargar();
+            },
+            mounted(){
+                document.addEventListener('DOMContentLoaded', function() {
+                    var elems = document.querySelectorAll('.modal');
+                    var instances = M.Modal.init(elems);
+  });
+            }
+
+        });
+    
+    </script>
+
+</body>
+</html>
